@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  ImageViewController.h
 //  PhotoTake
 //
 //  Created by Xinyu Liang on 16/10/3.
@@ -8,8 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+@interface ImageViewController : UIViewController
 
-
+@property(nonatomic,strong)NSString* imageURL;
 @end
-

@@ -15,10 +15,10 @@
 
 @interface Photo:NSManagedObject
 
-@property (nullable, nonatomic, retain) NSString *title;
-@property (nullable, nonatomic, retain) NSString *subTitle;
-@property (nullable, nonatomic, retain) NSString *imageURL;
-@property (nullable, nonatomic, retain) NSString *unique;
-@property (nullable, nonatomic, retain) Photographer *photographer;
+@property (nonatomic, retain) NSString *title;
+@property (nonatomic, retain) NSString *subTitle;
+@property (nonatomic, retain) NSString *imageURL;
+@property (nonatomic, retain) NSString *unique;
+@property (nonatomic, retain) Photographer *photographer;
 
 @end

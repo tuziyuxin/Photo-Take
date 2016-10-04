@@ -15,7 +15,7 @@
     Photographer* photographer=nil;
     if ([name length]) {
         NSFetchRequest* request=[NSFetchRequest fetchRequestWithEntityName:@"Photographer"];
-        request.predicate=[NSPredicate predicateWithFormat:@"name =",name];
+        request.predicate=[NSPredicate predicateWithFormat:@"name = %@",name];
         NSError *error=nil;
         NSArray* matches=[context executeFetchRequest:request error:&error];
         if (!matches|| error||[matches count]>1) {

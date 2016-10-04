@@ -9,18 +9,13 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-NS_ASSUME_NONNULL_BEGIN
 
 @class Photo;
 
 @interface Photographer: NSManagedObject
 
-@property (nullable, nonatomic, retain) NSString *name;
-@property (nullable, nonatomic, retain) NSSet<Photo *> *photos;
-
-
-
-
+@property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) NSSet<Photo *> *photos;
 
 @end
 
@@ -31,6 +26,5 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)addPhotos:(NSSet *)values;
 - (void)removePhotos:(NSSet *)values;
 
-NS_ASSUME_NONNULL_END
 @end
 
