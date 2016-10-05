@@ -30,11 +30,15 @@
     }
     self.navigationItem.title=@"Photographer";
 }
--(void)viewDidLoad
+
+-(UITableViewCell* )tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.navigationController) {
-        NSLog(@"%lu COUNT",[self.navigationController.viewControllers count]);
-    }
+    UITableViewCell* cell =[self.tableView dequeueReusableCellWithIdentifier:@"table view cell"];
+    Photographer* photographer=[self.fetchResultsController objectAtIndexPath:indexPath];
+    cell.textLabel.text=photographer.name;
+    cell.detailTextLabel.text=[NSString stringWithFormat:@"%lu photos",[photographer.photos count]];
+    
+    return cell;
 }
 
 -(void)setContext:(NSManagedObjectContext *)context
@@ -57,15 +61,7 @@
 }
 #pragma mark - UITableViewDataSource
 
--(UITableViewCell* )tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell* cell =[self.tableView dequeueReusableCellWithIdentifier:@"table view cell"];
-    Photographer* photographer=[self.fetchResultsController objectAtIndexPath:indexPath];
-    cell.textLabel.text=photographer.name;
-    cell.detailTextLabel.text=[NSString stringWithFormat:@"%lu photos",[photographer.photos count]];
-    
-    return cell;
-}
+
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {

@@ -23,19 +23,21 @@
 
 @implementation AppDelegate
 
+
 #pragma mark -definations
-#define FOREGROUND_FLICKR_FETCH_INTERVAL (20*60)
 
-#define BACKGROUND_FLICKR_FETCH_TIMEOUT 10
+        #define FOREGROUND_FLICKR_FETCH_INTERVAL (20*60)
 
-#define FLICKR_FETCH @"Flickr Just Uploaded Fetch"
+        #define BACKGROUND_FLICKR_FETCH_TIMEOUT 10
+
+        #define FLICKR_FETCH @"Flickr Just Uploaded Fetch"
 
 #pragma mark -initWithContextAndFetch
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
     
-#warning do not konw why the header is supposed to put in here,otherwise it will be fault//cycle bring in
+
     
     self.context=[self createManagedObjectContext];//此时依然什么也都没有，需要下东西到context中
     [self startFetch];
@@ -56,6 +58,7 @@
                                               userInfo:nil
                                                repeats:YES];
     NSDictionary* dictionary=self.context?@{PhotoDatabaseAvailabilityContext:self.context}:nil;
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:PhotoDatabaseAvailabilityNotification
                                                         object:nil
                                                       userInfo:dictionary];
@@ -103,7 +106,16 @@
     return _session;
 }
 
+
+
 #pragma mark- occionally fetch
+
+-(void)application:(UIApplication*)application handleEventsForBackgroundURLSession:(nonnull NSString *)identifier completionHandler:(nonnull void (^)())completionHandler
+{
+    self.flickrDownloadBackgroundURLSessionCompletionHandler=completionHandler;
+}
+
+
 -(void)application:(UIApplication *)application performFetchWithCompletionHandler:(nonnull void (^)(UIBackgroundFetchResult))completionHandler
 {
     if (self.context) {
@@ -138,6 +150,7 @@
 -(void)loadFlickrPhotosFromLocalURL:(NSURL*)localFile intoContext:(NSManagedObjectContext*)context andThenExecuteBlock:(void(^)())whenDone
 {
     NSArray* array=[self flickrPhotosAtURL:localFile];
+    
     if (array)
     {
          [context performBlock:^
@@ -172,11 +185,6 @@
     [self saveContext];
 }
 
-- (void)applicationDidEnterBackground:(UIApplication *)application {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-}
-
 -(void)applicationWillTerminate:(UIApplication *)application
 {
     [self saveContext];
@@ -193,17 +201,6 @@
     }
 }
 
-- (void)applicationWillEnterForeground:(UIApplication *)application {
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-}
-
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-}
--(void)application:(UIApplication*)application handleEventsForBackgroundURLSession:(nonnull NSString *)identifier completionHandler:(nonnull void (^)())completionHandler
-{
-    self.flickrDownloadBackgroundURLSessionCompletionHandler=completionHandler;
-}
 #pragma mark - SessionDelegate
 
 // required by the protocol
@@ -229,8 +226,7 @@ didFinishDownloadingToURL:(NSURL *)localFile
  didResumeAtOffset:(int64_t)fileOffset
 expectedTotalBytes:(int64_t)expectedTotalBytes
 {
-    // we don't support resuming an interrupted download task
-}
+  }
 
 // required by the protocol
 - (void)URLSession:(NSURLSession *)session
@@ -239,12 +235,9 @@ expectedTotalBytes:(int64_t)expectedTotalBytes
  totalBytesWritten:(int64_t)totalBytesWritten
 totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 {
-    // we don't report the progress of a download in our UI, but this is a cool method to do that with
+    
 }
 
-// not required by the protocol, but we should definitely catch errors here
-// so that we can avoid crashes
-// and also so that we can detect that download tasks are (might be) complete
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
 {
     if (error && (session == self.session)) {

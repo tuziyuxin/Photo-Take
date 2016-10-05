@@ -21,17 +21,15 @@
 -(void)viewDidLoad
 {
     [self.scollView addSubview:self.imageView];
-    NSLog(@"this is ImageViewController");
-    NSLog(@"%@",self.splitViewController.viewControllers[0].title);
 }
--(UIScrollView*)scrollView
+-(void)setScollView:(UIScrollView *)scollView
 {
-    UIScrollView* scroll=nil;
-    scroll.minimumZoomScale=0.2;
-    scroll.maximumZoomScale=2.0;
-    scroll.delegate=self;
-    scroll.contentSize=self.image?self.image.size:CGSizeZero;
-    return scroll;
+    _scollView=scollView;
+    _scollView.minimumZoomScale = 0.2;
+    _scollView.maximumZoomScale = 2.0;
+    _scollView.delegate = self;
+    self.scollView.contentSize = self.image ? self.image.size : CGSizeZero;
+
 }
 -(UIImageView*)imageView
 {
@@ -47,7 +45,7 @@
         return;
     }
     self.image=nil;
-    self.scollView.scrollEnabled=NO;
+    //self.scollView.scrollEnabled=NO;
     [self.spinner startAnimating];
     _imageURL=imageURL;
     [self startDownloadImage:imageURL];
@@ -56,13 +54,26 @@
 -(void)setImage:(UIImage *)image
 {
     _image=image;
-    self.imageView.image=image;
-    self.scollView.zoomScale=1;
-#warning imageView frame is to be specified
-    self.imageView.frame=CGRectMake(0, 0, self.image.size.width, self.image.size.height);
-    self.scollView.contentSize=image.size;
+    
+    self.imageView.image=image;//image会根据imageview自动设置大小
+    
+    CGFloat widthScale=self.scollView.frame.size.width/image.size.width;
+    CGFloat heightScale=self.scollView.frame.size.height/image.size.height;
+    if (image) {
+        self.imageView.frame=CGRectMake(0, 0,image.size.width,image.size.height);
+        CGFloat width=image.size.width*widthScale;
+        CGFloat height=image.size.height*heightScale;
+        self.imageView.frame=CGRectMake(0, 0, width,height);
+    }
+    
+    self.scollView.zoomScale=1;//和image没有关系
+    self.scollView.minimumZoomScale=1;
+    
+    self.scollView.contentSize=self.imageView.frame.size;
+    self.scollView.contentInset=UIEdgeInsetsMake(0, 0, 0, 0);
+    
     [self.spinner stopAnimating];
-    self.scollView.scrollEnabled=YES;
+
     
 }
 -(void)startDownloadImage:(NSString*) imageURL
@@ -98,7 +109,10 @@
 {
     return self.imageView;
 }
-
+-(void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view
+{
+    
+}
 #pragma mark - UISplitViewControllerDelegate
 
 // this section added during Shutterbug demo
