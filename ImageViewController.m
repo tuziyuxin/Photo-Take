@@ -25,8 +25,7 @@
 -(void)setScollView:(UIScrollView *)scollView
 {
     _scollView=scollView;
-    _scollView.minimumZoomScale = 0.2;
-    _scollView.maximumZoomScale = 2.0;
+     _scollView.maximumZoomScale = 2.0;
     _scollView.delegate = self;
     self.scollView.contentSize = self.image ? self.image.size : CGSizeZero;
 
@@ -45,7 +44,6 @@
         return;
     }
     self.image=nil;
-    //self.scollView.scrollEnabled=NO;
     [self.spinner startAnimating];
     _imageURL=imageURL;
     [self startDownloadImage:imageURL];
